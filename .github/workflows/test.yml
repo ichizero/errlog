@@ -1,0 +1,42 @@
+name: Test
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  # Cancel in-progress runs if a new run is triggered. In the main branch, the run is not canceled.
+  group: ${{ contains(github.ref_name, 'main') && github.run_id || format('{0}-{1}', github.workflow, github.ref_name) }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+          cache-dependency-path: "go.sum"
+      - name: "go vet"
+        run: |
+          go vet ./...
+      - name: "go test"
+        run: |
+          go test -cover -coverprofile coverage.txt -race -v ./...
+      - uses: codecov/codecov-action@v4
+
+  golangci-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+          cache: false # Use golangci-lint-action cache instead.
+      - uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.56
