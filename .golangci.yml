@@ -5,7 +5,7 @@ linters:
   default: all
   disable:
     - depguard
-    - err113
+    - err113 # Use errorlint instead.
     - exhaustruct
     - forbidigo
     - nlreturn
@@ -13,11 +13,22 @@ linters:
     - paralleltest
     - testableexamples
     - testpackage
-    - tparallel
+    - tparallel # Use paralleltest instead.
     - varnamelen
     - wrapcheck
     - wsl
     - wsl_v5
+    # v1 deprecated linters (removed in v2; no longer valid disable targets):
+    # - deadcode      # deprecated
+    # - exhaustivestruct # deprecated
+    # - golint        # deprecated
+    # - ifshort       # deprecated
+    # - interfacer    # deprecated
+    # - maligned      # deprecated
+    # - nosnakecase   # deprecated
+    # - scopelint     # deprecated
+    # - structcheck   # deprecated
+    # - varcheck      # deprecated
   exclusions:
     generated: lax
     presets:
@@ -38,7 +49,7 @@ linters:
 formatters:
   enable:
     - gci
-    - gofumpt
+    - gofumpt # Use gofumpt instead.
     - goimports
   exclusions:
     generated: lax
