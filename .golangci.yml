@@ -1,40 +1,61 @@
+version: "2"
 run:
-  timeout: 5m
   tests: true
-  skip-dirs:
-    - .github
-  skip-files:
-    - ".*_gen.go$"
-output:
-  sort-results: true
-linters: # https://golangci-lint.run/usage/linters/
-  enable-all: true
+linters:
+  default: all
   disable:
     - depguard
-    - forbidigo
+    - err113 # Use errorlint instead.
     - exhaustruct
+    - forbidigo
     - nlreturn
+    - noinlineerr
     - paralleltest
     - testableexamples
-    - varnamelen
-    - wrapcheck
-    - goerr113 # Use errorlint instead.
-    - gofmt # Use gofumpt instead.
     - testpackage
     - tparallel # Use paralleltest instead.
+    - varnamelen
+    - wrapcheck
     - wsl
-    - deadcode  # deprecated
-    - exhaustivestruct # deprecated
-    - golint      # deprecated
-    - ifshort     # deprecated
-    - interfacer  # deprecated
-    - maligned    # deprecated
-    - nosnakecase # deprecated
-    - scopelint   # deprecated
-    - structcheck # deprecated
-    - varcheck    # deprecated
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - funlen
+    - wsl_v5
+    # v1 deprecated linters (removed in v2; no longer valid disable targets):
+    # - deadcode      # deprecated
+    # - exhaustivestruct # deprecated
+    # - golint        # deprecated
+    # - ifshort       # deprecated
+    # - interfacer    # deprecated
+    # - maligned      # deprecated
+    # - nosnakecase   # deprecated
+    # - scopelint     # deprecated
+    # - structcheck   # deprecated
+    # - varcheck      # deprecated
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - funlen
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - ^\.github/
+      - .*_gen\.go$
+formatters:
+  enable:
+    - gci
+    - gofumpt # Use gofumpt instead.
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - ^\.github/
+      - .*_gen\.go$
