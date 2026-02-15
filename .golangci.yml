@@ -1,40 +1,50 @@
+version: "2"
 run:
-  timeout: 5m
   tests: true
-  skip-dirs:
-    - .github
-  skip-files:
-    - ".*_gen.go$"
-output:
-  sort-results: true
-linters: # https://golangci-lint.run/usage/linters/
-  enable-all: true
+linters:
+  default: all
   disable:
     - depguard
-    - forbidigo
+    - err113
     - exhaustruct
+    - forbidigo
     - nlreturn
+    - noinlineerr
     - paralleltest
     - testableexamples
+    - testpackage
+    - tparallel
     - varnamelen
     - wrapcheck
-    - goerr113 # Use errorlint instead.
-    - gofmt # Use gofumpt instead.
-    - testpackage
-    - tparallel # Use paralleltest instead.
     - wsl
-    - deadcode  # deprecated
-    - exhaustivestruct # deprecated
-    - golint      # deprecated
-    - ifshort     # deprecated
-    - interfacer  # deprecated
-    - maligned    # deprecated
-    - nosnakecase # deprecated
-    - scopelint   # deprecated
-    - structcheck # deprecated
-    - varcheck    # deprecated
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - funlen
+    - wsl_v5
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - funlen
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - ^\.github/
+      - .*_gen\.go$
+formatters:
+  enable:
+    - gci
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - ^\.github/
+      - .*_gen\.go$
