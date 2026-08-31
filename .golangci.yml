@@ -7,7 +7,9 @@ linters:
     - depguard
     - err113 # Use errorlint instead.
     - exhaustruct
+    - exhaustruct_v5 # Same as exhaustruct.
     - forbidigo
+    - gomodguard # Use gomodguard_v2 instead.
     - nlreturn
     - noinlineerr
     - paralleltest
